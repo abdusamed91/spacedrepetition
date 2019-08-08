@@ -63,7 +63,6 @@ public class FlashCardTest {
 	}
 
 	@Test
-	@Ignore
 	public void FLashCardReviewTest() {
 		FlashCard fl = new FlashCard();
 		assertTrue(flashcardengine.isReviewCard(fl));
@@ -108,7 +107,6 @@ public class FlashCardTest {
 	// Priority Queue Test
 	// Be able to remove if something is ELEVEN bin in it
 	@Test
-	@Ignore
 	public void FlashCardQueueTest() {
 		List<FlashCard> l = new LinkedList<>();
 		FlashCard f = new FlashCard();
