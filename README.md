@@ -10,6 +10,11 @@ After application is hosted on a Tomcat Server using the `.war` file, go to to s
 
 >`mvn -Dtest=FlashCardTest test`
 
+## Additional specification
+
+- FlashCard per user session limited to 6 total flashCards
+
+
 ## Screenshot:
 
 

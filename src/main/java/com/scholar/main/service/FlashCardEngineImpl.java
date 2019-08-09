@@ -106,17 +106,7 @@ public class FlashCardEngineImpl implements FlashCardEngine {
 			return res;
 		
 		Collections.sort(flashCards,Collections.reverseOrder());
-		// PQ reverse because higher bin reviewed first 
-//		PriorityQueue<FlashCard> pq = new PriorityQueue<>(Collections.reverseOrder());
-//	
-//		for(FlashCard f : flashCards) {
-////			if(isReviewCard(f)) 
-//				pq.add(f);
-//		}
-//		
-//		while(!pq.isEmpty())
-//			res.add(pq.poll());
-		
+
 		return flashCards;
 	}
 
@@ -141,6 +131,7 @@ public class FlashCardEngineImpl implements FlashCardEngine {
 			}
 			// If card cannot be reviewed, put it in the pending flashcard pool for user
 			else if (!isReviewCard(f)) {
+				f.printTimeToReview();
 				user.getFlashCardsOPendingPool().add(f);
 				it.remove();
 			}

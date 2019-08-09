@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 public class FlashCard implements Comparable<FlashCard>, Comparator<FlashCard> {
 	
 	private final UUID id;
-	
+	private String label;
 	private String content;
 
 	private boolean flagNever;
@@ -27,8 +27,6 @@ public class FlashCard implements Comparable<FlashCard>, Comparator<FlashCard> {
 	
 	private String reviewTime = "NOT_SEEN";
 	
-	
-	// Countdown timer which updates upon each load up and sets up the correct bucket -> engine
 	public FlashCard () {
 		this.id = UUID.randomUUID();
 		this.targetTime.set(1970, 1, 1);
@@ -44,6 +42,7 @@ public class FlashCard implements Comparable<FlashCard>, Comparator<FlashCard> {
 		this.wrongCounter = 0;
 		this.flagNever = false;
 		this.content = content;
+		this.label = "FlashCard_Label:" + content.charAt(content.length()-1);
 	}
 	
 	/**
@@ -57,6 +56,7 @@ public class FlashCard implements Comparable<FlashCard>, Comparator<FlashCard> {
 		this.wrongCounter = fc.getWrongCounter();
 		this.flagNever = fc.isFlagNever();
 		this.content = fc.getContent();
+		this.label = fc.getLabel();
 	}
 	
 	
@@ -194,15 +194,20 @@ public class FlashCard implements Comparable<FlashCard>, Comparator<FlashCard> {
 	}
 	
 	
+	
+	public String getLabel() {
+		return label;
+	}
+
 	private String printTimeToReview(Object o) {
 		if (bucket == Bucket.ELEVEN)
-			return "FlashCard is HARD to Review";
+			return "FlashCard is HARD. Never Review";
 		if (bucket == Bucket.ZERO)
 			return "Reviewing Now";
 		long now = Calendar.getInstance().getTimeInMillis(); 
 		long tar = targetTime.getTimeInMillis();
 		if(tar - now <= 0)  {
-			return "In Review ..";
+			return "Ready to be Reviewed";
 		}
 		else {
 			long diff = Math.abs(tar - now);
@@ -215,7 +220,7 @@ public class FlashCard implements Comparable<FlashCard>, Comparator<FlashCard> {
 				long diffHours = diff / (60 * 60 * 1000) % 24;
 				long diffDays = diff / (24 * 60 * 60 * 1000);
 				
-				return String.format("ext review time in %d days %d hours "
+				return String.format("Reviewing in %d days %d hours "
 						+ "%d minutes %d seconds %n"
 						, diffDays,diffHours,diffMinutes,diffSeconds);
 				

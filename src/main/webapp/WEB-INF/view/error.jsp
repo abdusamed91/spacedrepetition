@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,8 +6,9 @@
 <title>Error</title>
 </head>
 <body>
-<h1>Error Occured!</h1>
+<h1>Something bad might have happened</h1>
 
-<h3>${message}</h3>
+<p>Message: <h3> ${message} </h3></p>  
+<a href="${pageContext.request.contextPath}/flashcard/">Return back to Welcome Page</a>
 </body>
 </html>

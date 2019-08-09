@@ -44,18 +44,19 @@ public class FlashCardUserController {
 			model.addAttribute("userid","... no userid currently assigned");
 			return WELCOME;
 		}
+		
 		User u = userSession.get(userid);
 		
 		// Refresh the review counter
 		for(FlashCard f : u.getFlashCards())
-			f.getReviewTime();
+			f.printTimeToReview();
 		for(FlashCard f : u.getFlashCardsNoReviewSet())
-			f.getReviewTime();
+			f.printTimeToReview();
 		for(FlashCard f : u.getFlashCardsOPendingPool())
-			f.getReviewTime();
+			f.printTimeToReview();
 		
 		
-		model.addAttribute("userid","... no userid currently assigned");
+		model.addAttribute("usermessage","Showing FlashCard details for userid: " + userid);
 		model.addAttribute("flashcardlist",u.getFlashCards());
 		model.addAttribute("flashcardNeverPool",u.getFlashCardsNoReviewSet());
 		model.addAttribute("flashcardPendingPool",u.getFlashCardsOPendingPool());
@@ -91,12 +92,22 @@ public class FlashCardUserController {
 	
 	@GetMapping("/user/{userid}")
 	public String refreshSessionUser(Model model,@PathVariable("userid") int userid, HttpServletResponse response) {
+		if(userid == -1) {
+			model.addAttribute("message","userid_cannot_be_negative");
+			return ERROR;
+		}
+		User user = userSession.get(userid);
+		if(user == null) {
+			model.addAttribute("message","No_user_found_for_given_userid:" + userid);
+			return ERROR;
+
+		}
 		Cookie cookie = new Cookie("userid",String.valueOf(userid));
 		response.addCookie(cookie);
-		User user = userSession.get(userid);
+		
 		flashcardengine.updateFlashCardsForUser(user,5); // clean up and get card from pool  
 		flashcardengine.buildQueueForFlashCards(user.getFlashCards()); // queue it all up
-		return "redirect:/flashcard/run";
+		return WELCOME;
 	}
 
 

@@ -1,5 +1,4 @@
 <%@include file="index.jsp" %>
-<h3>End of Session</h3>
-${message}
+<h4>End of Session Message</h3>
 
-<li><a href="${pageContext.request.contextPath}/flashcard/">Return to Welcome</a>
+<h3>${message}</h3>
