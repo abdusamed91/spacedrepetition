@@ -58,7 +58,7 @@ public class User {
 		return flashCardsNoReviewSet;
 	}
 
-	public List<FlashCard> getFlashCardsOPendingPool() {
+	public List<FlashCard> getFlashCardsPendingPool() {
 		return flashCardsOPendingPool;
 	}
 

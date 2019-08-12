@@ -8,12 +8,16 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.context.annotation.Bean;
 
+/**
+ * @author aahmed
+ *
+ */
 public class FlashCard implements Comparable<FlashCard>, Comparator<FlashCard> {
 	
 	private final UUID id;
-	private String label;
+	private String title;
 	private String content;
-
+	
 	private boolean flagNever;
 	private boolean flagDisplay = true;
 	
@@ -42,7 +46,17 @@ public class FlashCard implements Comparable<FlashCard>, Comparator<FlashCard> {
 		this.wrongCounter = 0;
 		this.flagNever = false;
 		this.content = content;
-		this.label = "FlashCard_Label:" + content.charAt(content.length()-1);
+		this.title = "FlashCard_Title: " + content.charAt(content.length()-1);
+	}
+	
+	public FlashCard (String title,String content) {
+		this.id = UUID.randomUUID();
+		this.targetTime.set(1970, 1, 1);
+		this.bucket = Bucket.ZERO;
+		this.wrongCounter = 0;
+		this.flagNever = false;
+		this.content = content;
+		this.title = title;
 	}
 	
 	/**
@@ -56,7 +70,7 @@ public class FlashCard implements Comparable<FlashCard>, Comparator<FlashCard> {
 		this.wrongCounter = fc.getWrongCounter();
 		this.flagNever = fc.isFlagNever();
 		this.content = fc.getContent();
-		this.label = fc.getLabel();
+		this.title = fc.getLabel();
 	}
 	
 	
@@ -196,7 +210,7 @@ public class FlashCard implements Comparable<FlashCard>, Comparator<FlashCard> {
 	
 	
 	public String getLabel() {
-		return label;
+		return title;
 	}
 
 	private String printTimeToReview(Object o) {
@@ -251,6 +265,16 @@ public class FlashCard implements Comparable<FlashCard>, Comparator<FlashCard> {
 		return this.getId().equals(c.getId());
 	}
 	
+	
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	@Override
 	public int hashCode() {
 		return id.hashCode();

@@ -33,10 +33,32 @@ public class FlashCardUserController {
 	private final static String INFORM = "inform";
 	private final static String WELCOME = "welcome";
 	private final static String FLASHCARDPRINT = "flashcardprint";
+	private final static String CREATEFLASHCARD = "createflashcard";
 
 	private final static List<User> userSession = new LinkedList<>();
 	private static int counter = 0;
 	
+	// Create Flashcards
+	@GetMapping("/create")
+	public String getcreateFlashCard(Model model,@CookieValue(value="userid",defaultValue="-1") int userid) {
+		if(userid == -1) {
+			model.addAttribute("userid","... no userid currently assigned");
+			return WELCOME;
+		}
+		model.addAttribute("flashcardtotalpool",flashcardengine.getFlashCardPool());
+		return CREATEFLASHCARD;
+	}
+	
+	@PostMapping("/create")
+	public String getcreateFlashCard(Model model,HttpServletRequest request) {
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		flashcardengine.getFlashCardPool().add(new FlashCard(title,content));
+		
+		model.addAttribute("flashcardtotalpool",flashcardengine.getFlashCardPool());
+		model.addAttribute("message","Flashcard created successfully");
+		return CREATEFLASHCARD;
+	}
 	
 	@GetMapping("/all")
 	public String userAllFlashCard( Model model,@CookieValue(value="userid",defaultValue="-1") int userid) {
@@ -52,14 +74,14 @@ public class FlashCardUserController {
 			f.printTimeToReview();
 		for(FlashCard f : u.getFlashCardsNoReviewSet())
 			f.printTimeToReview();
-		for(FlashCard f : u.getFlashCardsOPendingPool())
+		for(FlashCard f : u.getFlashCardsPendingPool())
 			f.printTimeToReview();
 		
 		
 		model.addAttribute("usermessage","Showing FlashCard details for userid: " + userid);
 		model.addAttribute("flashcardlist",u.getFlashCards());
 		model.addAttribute("flashcardNeverPool",u.getFlashCardsNoReviewSet());
-		model.addAttribute("flashcardPendingPool",u.getFlashCardsOPendingPool());
+		model.addAttribute("flashcardPendingPool",u.getFlashCardsPendingPool());
 		
 		return FLASHCARDPRINT;
 		
@@ -74,6 +96,10 @@ public class FlashCardUserController {
 		return WELCOME;
 		
 	}
+	
+//	private void loadUser(Model, model, HttpServletRequst request, int userid){ 
+//		
+//	}
 
 	@GetMapping("/init")
 	public String initUser( Model model, HttpServletResponse response, HttpServletRequest request) {

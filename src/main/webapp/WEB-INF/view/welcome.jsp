@@ -6,23 +6,37 @@
 <meta charset="UTF-8">
 <title>Welcome</title>
 </head>
-<body>
+<body style="max-width:1200px;margin:auto">
 <h1>FlashCard App MVP</h1>
 <h2>You Current UserId is <strong>${userid}</strong></h2>
-<h3>Summary</h3>
-<p>The flashcards dictionary <strong>prepopulated</strong> on application start. From this pool, flashcards are picked and added 
-to the user personal pool. Each user is defined by having its own unique <em>userid</em>.
+<h3>Notes</h3>
+<p>The initial pool of flashcards is prefilled with dummy data on application start. From this pool, flashcards are placed in users pool. Each user as 
+three set of pool.
+<ol>
+<li>Flashcard in current view i.e Enqueue pool </li>
+<li>Flashcard temporary frozen i.e pending pool </li>
+<li>Flashcard permanently frozen i.e forgotten pool</li>
+</ol>
+To emulate as close to real life application with user name and registration, <em>userid</em> is used to keep track of user progress
+in the web application. Each userid in the current state of application is essence, a unique user with its own set of aforementioned sets.
 <p>
 <p>
-	The user registration and user session mocking is achieved by creating a unique userId via the <strong>init</strong> end point. The
-	endpoint creates a userid and stores as a cookie. Session management in the current state of the app is achieved with cookie.
+Session management in the application is done via cookie where the userid is saved. This userid is sent across the application and is used 
+as a reference point in identifying, <em>who is using the application</em>.
 </p>
 
-<h3>Instructions</h3>
+<h3>Instructions to Emulate normal User Behavior. </h3>
 <ol>
-<li><a href="${pageContext.request.contextPath}/flashcard/init">Click here</a> to initialize a userID. The userID will be stored as a cookie</li>
-<li><a href="${pageContext.request.contextPath}/flashcard/run">Click here</a> to being Flashcard after initializing</li>
-<li><a href="${pageContext.request.contextPath}/flashcard/all">Click here</a> to view all flashcards assigned to you if initialized</li>
+<li><a href="${pageContext.request.contextPath}/flashcard/init">Click here</a> to initialize a userID [user registering]. Emulates user registration</li>
+<li><a href="${pageContext.request.contextPath}/flashcard/run">Click here</a> to create queue and view flashcard after userid is generated. Emulates start of flashcards</li>
+<li><a href="${pageContext.request.contextPath}/flashcard/all">Click here</a> to view current state of flashcard for the user. Emulates expected view of user's dashboard</li>
+</ol>
+<h4>Extra features for Admin</h4>
+<ol>
+<li>
+	<a href="${pageContext.request.contextPath}/flashcard/create">Click here</a> to Create new FlashCards and <strong> view all
+	flashcards currently stored in the app</strong>
+</li>
 </ol>
 <br>
 <!-- <em>Tip</em>
@@ -32,5 +46,7 @@ to the user personal pool. Each user is defined by having its own unique <em>use
 	
 	 </p>
  -->
+ 
+ <code>Author: Abdusamed Ahmed</code>
 </body>
 </html>

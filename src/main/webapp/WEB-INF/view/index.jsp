@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,13 +23,12 @@ tr:nth-child(even) {
 }
 </style>
 </head>
-<body>
+
+<body style="max-width:1200px;margin:auto">
 <nav>
-UserSession Id: <strong>${user.userid}</strong> 
-Name: <strong>${user.username}</strong><br>
+<h4>Current UserSession Id: <strong>${cookie.userid.value}</strong><h4> 
 <a href="${pageContext.request.contextPath}/flashcard/">Return to Welcome</a>
 </nav>
+<hr>	
 
 
-</body>
-</html>

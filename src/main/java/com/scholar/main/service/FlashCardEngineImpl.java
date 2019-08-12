@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import com.scholar.main.controllers.model.FlashCard;
 import com.scholar.main.controllers.model.FlashCard.Bucket;
@@ -84,7 +83,7 @@ public class FlashCardEngineImpl implements FlashCardEngine {
 		if(fl.getWrongCounter() >= 10) {
 			return updateFlashCardBucket(fl,Bucket.ELEVEN);
 		}
-		return updateFlashCardBucket(fl,Bucket.ZERO);
+		return updateFlashCardBucket(fl,Bucket.ONE);
 	}
 	
 	private int getBucketIndex(FlashCard fl) {
@@ -132,13 +131,13 @@ public class FlashCardEngineImpl implements FlashCardEngine {
 			// If card cannot be reviewed, put it in the pending flashcard pool for user
 			else if (!isReviewCard(f)) {
 				f.printTimeToReview();
-				user.getFlashCardsOPendingPool().add(f);
+				user.getFlashCardsPendingPool().add(f);
 				it.remove();
 			}
 		}
 		
 		// Add all flash cards from the pending pool which can be reviewed right now
-		it = user.getFlashCardsOPendingPool().iterator();
+		it = user.getFlashCardsPendingPool().iterator();
 		while(it.hasNext()) {
 			FlashCard f = it.next();
 			if(flashCards.size() > size)
@@ -156,7 +155,7 @@ public class FlashCardEngineImpl implements FlashCardEngine {
  			if(flashCards.size() <= size) {
 				// Check if card not already in review card for user && not in Never Review Card for that user
 				if(!flashCards.contains(f) && !user.getFlashCardsNoReviewSet().contains(f) 
-						&& !user.getFlashCardsOPendingPool().contains(f))
+						&& !user.getFlashCardsPendingPool().contains(f))
 					flashCards.add(new FlashCard(f));
 			}
 			else {

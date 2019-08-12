@@ -1,30 +1,30 @@
-package com.example.demo.model.flashcard;
+package com.scholar.main;
 
-import static org.assertj.core.api.Assertions.not;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Set;
-import java.util.UUID;
 
-import org.hamcrest.core.IsNot;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import com.scholar.main.FlashCardScholarApplication;
 import com.scholar.main.controllers.model.FlashCard;
-import com.scholar.main.controllers.model.User;
 import com.scholar.main.controllers.model.FlashCard.Bucket;
+import com.scholar.main.controllers.model.User;
 import com.scholar.main.service.FlashCardEngine;
 import com.scholar.main.service.FlashCardEngineImpl;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes=FlashCardScholarApplication.class)
 public class FlashCardTest {
 
 	private static FlashCardEngine flashcardengine;
@@ -84,7 +84,7 @@ public class FlashCardTest {
 		assertTrue(fl.getBucket() == Bucket.TWO);
 		
 		assertTrue(flashcardengine.resetBucket(fl));
-		assertTrue(fl.getBucket() == Bucket.ZERO);
+		assertTrue(fl.getBucket() == Bucket.ONE);
 
 		// Never Bucket Test
 		assertTrue(flashcardengine.resetBucket(fl));
@@ -157,10 +157,6 @@ public class FlashCardTest {
 	 * User flashcard dictionary is incremently increased as opposed 
 	 * to loading it up all in the memory #feature
 	 */
-	
-	// TODO the flashcard is only retrieved from the user 'dictionary' 
-	// and sent a reference of it and the attributes which are to be changed
-	// is updated
 	@Test
 	public void testQueneManupilationForUser() {
 		User u = new User("andy", "murphy");
@@ -210,32 +206,31 @@ public class FlashCardTest {
 		assertThat("FlashCard_4 is in 'No Review Bin'",
 				u.getFlashCardsNoReviewSet().contains(flashCard_4),is(true));
 		assertThat("FlashCard_3 is in 'User pool bin'",
-				u.getFlashCardsOPendingPool().contains(flashCard_3),is(true));
+				u.getFlashCardsPendingPool().contains(flashCard_3),is(true));
 		assertThat("FlashCard_4 DNE in User Queue list",
 						u.getFlashCards().contains(flashCard_4),is(false));
 		
 		//##############SESSION 2 SIMULATION############################
 		//##########Make Card in Pending Pool Discoverable##############
-		FlashCard flashCardFromPoolToQueue = u.getFlashCardsOPendingPool().get(0);
+		FlashCard flashCardFromPoolToQueue = u.getFlashCardsPendingPool().get(0);
 		for(int i = 1; i <=10;i++) 
 			// Push second card into NEVER bin
 			flashcardengine.resetBucket(u.getFlashCards().get(1));
 		
 		flashcardengine.resetBucket(flashCardFromPoolToQueue); // Now pool card availiable for view
 		flashcardengine.updateFlashCardsForUser(u,5); // clean up and get card from pool  
-		flashcardengine.buildQueueForFlashCards(u.getFlashCards()); // queue it all up
+		flashcardengine.buildQueueForFlashCards(u.getFlashCards()); // create queue from the card pool
 		assertThat(u.getFlashCards().size(),is(6));
-		assertThat("FlashCard from Pool is now in for display",
-				u.getFlashCards().contains(flashCardFromPoolToQueue),is(true));
+		assertThat("FlashCard from Pool is not in for display because in Bin ONE",
+				u.getFlashCards().contains(flashCardFromPoolToQueue),is(false));
 
 		for(FlashCard f : u.getFlashCards())
 			if(f.equals(flashCardFromPoolToQueue))
 				assertThat("FlashCard from pool is viewable",
 						f.isFlagDisplay(),is(true));
 		
-		assertThat("FlashCard from is in 'User pool bin'",
-				u.getFlashCardsOPendingPool().contains(flashCardFromPoolToQueue),is(false));
+		assertThat("Flashcard is in the pool for User and not currently in queue",
+				u.getFlashCardsPendingPool().contains(flashCardFromPoolToQueue),is(true));
 		
-		System.out.println(u.getFlashCards().toString());
 	}
 }

@@ -14,17 +14,17 @@
 		<th>FlashCard Value</th>
 	</tr>
 	
-	<tr>
+<%-- 	<tr>
 		<td>FlashCard Number</td>
 		<td>${cookie.flashcardNum.value}</td>
-	</tr>
-	<tr>
-		<td>FlashCard Label</td>
-		<td>${flashcard.label}</td>
-	</tr>
-	<tr>
+	</tr> --%>
+		<tr>
 		<td>FlashCard UUID</td>
 		<td>${trimUUID}</td>
+	</tr>
+	<tr>
+		<td>FlashCard Title</td>
+		<td>${flashcard.title}</td>
 	</tr>
 	<tr>
 		<td>Bucket</td>
@@ -68,6 +68,6 @@
 	
 	</table>
 	
-	
-	
+</body>
+</html>
 	
